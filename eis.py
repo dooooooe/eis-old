@@ -2,7 +2,7 @@ import re
 import dotenv
 import os
 from storage import userdata
-from actions import work, give, steal, gamble, connect_four, nickname, check_balance, check_leaderboard, check_game_history
+from actions import work, give, steal, coinflip, gamble, connect_four, nickname, check_balance, check_leaderboard, check_game_history
 
 dotenv.load_dotenv()
 PREFIX = os.getenv('PREFIX')
@@ -15,14 +15,14 @@ async def process(client, ctx): # if message starts with command and matches par
     content = ctx.content
     print(content)
         
-    def re_match(commands, user=None, value=None, string=None, freaky=None):
+    def re_match(commands, user=None, value=None, percent=None, string=None, freaky=None):
         pattern = r'^' + '(?:' + '|'.join(re.escape(command) for command in commands) + ')'
 
         if user:
             pattern += r'(?: ((?:<@\d{18,19}>)|.+))' + ('?' if user == 'optional' else '')
 
         if value:
-            pattern += r'(?: (\d+))' + ('?' if value == 'optional' else '')
+            pattern += r'(?: (\d+' + ('%?))' if percent else '))') + ('?' if value == 'optional' else '')
 
         if string:
             pattern += r'(?: (.+))' + ('?' if string == 'optional' else '')
@@ -107,19 +107,54 @@ async def process(client, ctx): # if message starts with command and matches par
             await ctx.reply(f'To steal someone\'s bits, type \'{PREFIX}steal `user`\'')
 
         return
+    
+    # coinflip
+    coinflip_cmds = tuple(PREFIX + x for x in ('coinflip', 'flipcoin', 'flip', 'coin'))
+
+    if content.startswith(coinflip_cmds):
+        r = re_match(coinflip_cmds, value='optional', percent=True)
+        if r:
+            wager = r.group(1) or 1
+
+            if '%' in wager:
+                wager = int(wager[:-1])/100
+                if wager > 0.25:
+                    ctx.reply(r'You cannot bet over 25% of your total balance with a percent value! Use the actual number to ensure you know just how much you are betting!')
+                    return
+                else:
+                    wager = round(wager * await userdata.get_data(ctx.author.id, 'money'))
+            else:
+                wager = int(wager)
+
+            await coinflip.run(ctx, wager)
+
+        else:
+            await ctx.reply(f'To flip a coin, type \'{PREFIX}coinflip `value`\'')
+
+        return
 
     # gambling !
-    gamble_cmds = tuple(PREFIX + x for x in ('gamble', ))
+    gamble_cmds = tuple(PREFIX + x for x in ('gamble', 'slots', 'spin'))
 
     if content.startswith(gamble_cmds):
-        r = re_match(gamble_cmds, value='optional')
+        r = re_match(gamble_cmds, value='optional', percent=True)
         if r:
-            wager = int(r.group(1)) if r.group(1) else 1
+            wager = r.group(1) or 1
+
+            if '%' in wager:
+                wager = int(wager[:-1])/100
+                if wager > 0.25:
+                    ctx.reply(r'You cannot bet over 25% of your total balance with a percent value! Use the actual number to ensure you know just how much you are betting!')
+                    return
+                else:
+                    wager = round(wager * await userdata.get_data(ctx.author.id, 'money'))
+            else:
+                wager = int(wager)
             
             await gamble.run(ctx, wager)
 
         else:
-            await ctx.reply(f'To gamble, type \'{PREFIX}gamble `value`\'')
+            await ctx.reply(f'To play slots, type \'{PREFIX}slots `value`\'')
 
         return
 
@@ -205,4 +240,4 @@ async def startup(client):
         if name == None:
             name = client.get_user(userid).name
 
-        await userdata.set_data(userid, name=name, ingame=False)
+        await userdata.set_data(userid, name=name, ingame=False, gambling=False)

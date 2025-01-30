@@ -27,5 +27,6 @@
         "D"
     ],
     "last_worked": 0,
-    "last_stolen": 0
+    "last_stolen": 0,
+    "gambling": false
 }

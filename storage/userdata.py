@@ -9,12 +9,13 @@ import aiofiles
 # setdata params
 
 class User:
-    def __init__(self, userid: int=-1, name: str=None, nickname: str=None, money: int=10, ingame: bool=False, game_history: list=['D' for _ in range(20)], last_worked: float=0, last_stolen: float=0):
+    def __init__(self, userid: int=-1, name: str=None, nickname: str=None, money: int=10, ingame: bool=False, gambling: bool=False, game_history: list=['D' for _ in range(50)], last_worked: float=0, last_stolen: float=0):
         self.userid = userid
         self.name = name
         self.nickname = nickname
         self.money = money
         self.ingame = ingame
+        self.gambling = gambling
         self.game_history = game_history
         self.last_worked = last_worked
         self.last_stolen = last_stolen
@@ -27,6 +28,7 @@ class User:
             'money': self.money,
             'ingame': self.ingame,
             'game_history': self.game_history,
+            'gambling': self.gambling,
             'last_worked': self.last_worked,
             'last_stolen': self.last_stolen
         }
@@ -82,7 +84,7 @@ async def get_data(userid, to_get=None):
         return data.get(to_get)
 
 
-async def set_data(userid, name: str=None, nickname: str=None, money: int=None, ingame: bool=None, game_history: list=None, last_worked: float=None, last_stolen: float=None):
+async def set_data(userid, name: str=None, nickname: str=None, money: int=None, ingame: bool=None, gambling: bool=None, game_history: list=None, last_worked: float=None, last_stolen: float=None):
     new_data = {key: value for key, value in locals().items() if key != "userid" and value is not None}
 
     await init_user(userid)
@@ -105,7 +107,7 @@ async def update_history(userid, history_type, entry):
     except KeyError:
         return
     
-    if len(history) == 20:
+    if len(history) == 50:
         del history[0]
 
     history.append(entry)

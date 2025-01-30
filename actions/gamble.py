@@ -1,11 +1,6 @@
 import random
+import asyncio
 from storage import userdata
-
-results = {
-    'win': (1, 31),
-    'loss': (-1, 50),
-    'jackpot': (20, 1)
-}
 
 async def run(ctx, wager):
     userid = ctx.author.id
@@ -14,40 +9,55 @@ async def run(ctx, wager):
 
     if balance < wager:
         await ctx.reply('You do not have enough bits!')
+        return
 
-    else:
-        payout = random.choices(list(r[0] for r in results.values()), weights=list(r[1] for r in results.values()), k=1)[0]
-        result = None
+    if data['gambling']:
+        await ctx.reply('You are already gambling!')
+        return
 
-        if payout == 1:
-            result = 'W'
-            await ctx.reply(f'You won {wager} bit' + ('s!' if wager != 1 else '!'))
+    await userdata.set_data(userid, gambling=True)
 
-        elif payout == -1:
-            result = 'L'
-            await ctx.reply('<:mimimimimimimi:1332364481694666873>')
+    emojis = ['🧀', '🥐', '🍞', '🥛', '🫘' , '🥔']
+    one = random.choice(emojis)
+    two = random.choice(emojis)
+    three = random.choice(emojis)
+    
+    game = await ctx.reply(f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦⬛🟦\n\nSpinning...')
+    await asyncio.sleep(0.5)
+
+    for i in range(4):
+        one = random.choice(emojis)
+        two = random.choice(emojis)
+        three = random.choice(emojis)
+
+        await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦⬛🟦\n\nSpinning...')
+        await asyncio.sleep(0.5)
+
+
+    payout = 0
+
+    if len(set([one, two, three])) == 1: # jackpot 
+        if one == '🧀':
+            payout = 17
+
+            await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦💰🟦\n\n🧀You got **THE BIG CHEESE**!!! You won {wager*payout} (x{payout}) bits!🧀')
+            await userdata.update_history(userid, 'game_history', 'W')
 
         else:
-            result = 'W'
-            await ctx.reply(f'**Jackpot!** You won {wager*payout} bits!')
+            payout = 3
 
-        data = await userdata.get_data(userid)
-        balance = data['money']
+            await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦💰🟦\n\nJackpot!! You won {wager*payout} (x{payout}) bits!')
+            await userdata.update_history(userid, 'game_history', 'W')
 
-        await userdata.set_data(userid, money=balance + (wager*payout))
-        await userdata.update_history(userid, 'game_history', result)
+    elif len(set([one, two, three])) == 2: # win 1x
+        payout = 1
+        await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦💵🟦\n\nCongratulations! You won {wager} bit' + ('s!' if wager != 1 else '!'))
+        await userdata.update_history(userid, 'game_history', 'W')
 
-
-def get_ev():
-    ev = 0
-    x = 0
-
-    for payout, chance in list(results.values()):
-        ev += payout * chance
-        x += chance
-
-    ev = (ev / x) * 100
+    else: #lose -1x
+        payout = -1
+        await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦⬛🟦\n# <:hehehehaw:1334502426069172246>')
+        await userdata.update_history(userid, 'game_history', 'L')
     
-    return ev
-
-# print(f' ev is {round(get_ev(), 2)}% return per play')
+    balance = await userdata.get_data(userid, 'money')
+    await userdata.set_data(userid, money =balance + wager*payout, gambling=False)
