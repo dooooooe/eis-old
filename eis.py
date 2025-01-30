@@ -2,7 +2,7 @@ import re
 import dotenv
 import os
 from storage import userdata
-from actions import work, give, steal, gamble, connect_four, check_balance, check_leaderboard, check_game_history
+from actions import work, give, steal, gamble, connect_four, nickname, check_balance, check_leaderboard, check_game_history
 
 dotenv.load_dotenv()
 PREFIX = os.getenv('PREFIX')
@@ -14,6 +14,44 @@ async def process(client, ctx): # if message starts with command and matches par
     
     content = ctx.content
     print(content)
+        
+    def re_match(commands, user=None, value=None, string=None, freaky=None):
+        pattern = r'^' + '(?:' + '|'.join(re.escape(command) for command in commands) + ')'
+
+        if user:
+            pattern += r'(?: ((?:<@\d{18,19}>)|.+))' + ('?' if user == 'optional' else '')
+
+        if value:
+            pattern += r'(?: (\d+))' + ('?' if value == 'optional' else '')
+
+        if string:
+            pattern += r'(?: (.+))' + ('?' if string == 'optional' else '')
+
+        if freaky:
+            pattern += '( freaky)?'
+
+        pattern += '$'
+
+        return re.match(pattern, content)
+
+
+    async def to_userid(group):
+        if group is None:
+            return -1
+        
+        elif re.match(r'<@\d{18,19}>', group):
+            return int(group[2:-1])
+        
+        else:
+            for userid in await userdata.get_all_users():
+                name = ctx.guild.get_member(userid).name
+                nickname = await userdata.get_data(userid, 'nickname')
+
+                if group in [name, nickname]:
+                    return userid
+            
+            return -1
+    
 
     async def id_is_user(id):
         member = ctx.guild.get_member(id)
@@ -24,22 +62,26 @@ async def process(client, ctx): # if message starts with command and matches par
         
         else:
             return True
+        
 
     # help 
     if content == PREFIX + 'help':
         await ctx.reply('<:sun:1332391811951624212>')
 
     # work
-    elif content == PREFIX + 'work':
+    if content == PREFIX + 'work':
         await work.run(ctx)
+        return
 
     # give
-    elif content.startswith(tuple(PREFIX + x for x in ('give', 'gift', 'pay'))):
-        r = re.match(r'^(give|gift|pay) <@(\d{18,19})> (\d+)$', content[len(PREFIX):])
+    give_cmds = tuple(PREFIX + x for x in ('give', 'gift', 'pay'))
+
+    if content.startswith(give_cmds):
+        r = re_match(give_cmds, user=True, value=True)
         if r:
             id = ctx.author.id
-            recipient = int(r.group(2))
-            value = int(r.group(3))
+            recipient = await to_userid(r.group(1))
+            value = int(r.group(2))
 
             if await id_is_user(recipient):
                 await give.run(ctx, id, recipient, value)
@@ -47,12 +89,16 @@ async def process(client, ctx): # if message starts with command and matches par
         else:
             await ctx.reply(f'To give someone bits, type \'{PREFIX}give `user` `value`\'')
 
+        return 
+
     # steal
-    elif content.startswith(tuple(PREFIX + x for x in ('steal', 'rob', 'heist'))):
-        r = re.match(r'^(steal|rob|heist) <@(\d{18,19})>$', content[len(PREFIX):])
+    steal_cmds = tuple(PREFIX + x for x in ('steal', 'rob', 'heist'))
+
+    if content.startswith(steal_cmds):
+        r = re_match(steal_cmds, user=True)
         if r:
             id = ctx.author.id
-            target = int(r.group(2))
+            target = await to_userid(r.group(1))
 
             if await id_is_user(target):
                 await steal.run(ctx, client, id, target)
@@ -60,28 +106,33 @@ async def process(client, ctx): # if message starts with command and matches par
         else:
             await ctx.reply(f'To steal someone\'s bits, type \'{PREFIX}steal `user`\'')
 
+        return
+
     # gambling !
-    elif content.startswith(PREFIX + 'gamble'):
-        r = re.match(r'^gamble( (\d+))?$', content[len(PREFIX):])
+    gamble_cmds = tuple(PREFIX + x for x in ('gamble', ))
+
+    if content.startswith(gamble_cmds):
+        r = re_match(gamble_cmds, value='optional')
         if r:
-            wager = r.group(2)
-            wager = int(wager) if wager else 1
+            wager = int(r.group(1)) if r.group(1) else 1
             
             await gamble.run(ctx, wager)
 
         else:
             await ctx.reply(f'To gamble, type \'{PREFIX}gamble `value`\'')
 
+        return
+
     # connect 4
-    elif content.startswith(tuple(PREFIX + x for x in ('connect4', 'connectfour', 'c4'))):
-        r = re.match(r'^(connect4|connectfour|c4) <@(\d{18,19})>( \d+)?( freaky)?$', content[len(PREFIX):])
+    c4_cmds = tuple(PREFIX + x for x in ('connect4', 'connectfour', 'c4'))
+
+    if content.startswith(c4_cmds):
+        r = re_match(c4_cmds, user=True, value='optional', freaky='optional')
         if r:
             id = ctx.author.id
-            opponent = int(r.group(2))
-            wager = r.group(3)
-            wager = int(wager) if wager else 0
-            freaky = r.group(4)
-            freaky = True if freaky else False
+            opponent = await to_userid(r.group(1))
+            wager = int(r.group(2)) if r.group(2) else 0
+            freaky = True if r.group(3) else False
 
             if await id_is_user(opponent):
                 await connect_four.run(client, ctx, id, opponent, wager, freaky)
@@ -89,12 +140,31 @@ async def process(client, ctx): # if message starts with command and matches par
         else:
             await ctx.reply(f'To play Connect 4, type \'{PREFIX}c4 `user` `value`\'')
 
-    # check balance
-    elif content.startswith(tuple(PREFIX + x for x in ('bal', 'balance', 'money', 'bits'))):
-        r = re.match(r'^(bal|balance|money|bits)( <@(\d{18,19})>)?$', content[len(PREFIX):])
+        return
+    
+    # nickname
+    nickname_cmds = tuple(PREFIX + x for x in ('nickname', 'nick', 'name', 'setnickname', 'setname', 'setnick'))
+
+    if content.startswith(nickname_cmds):
+        r = re_match(nickname_cmds, string='optional')
         if r:
-            id = r.group(3)
-            id = int(id) if id else ctx.author.id
+            id = ctx.author.id
+            name = r.group(1)
+
+            await nickname.run(ctx, id, name)
+
+        else:
+            await ctx.reply(f'To set your nickname, type \'{PREFIX}nickname `name`\'')
+
+        return
+
+    # check balance
+    bal_cmds = tuple(PREFIX + x for x in ('bal', 'balance', 'money', 'bits'))
+
+    if content.startswith(bal_cmds):
+        r = re_match(bal_cmds, user='optional')
+        if r:
+            id = await to_userid(r.group(1)) if r.group(1) else ctx.author.id
         
             if await id_is_user(id):
                 await check_balance.run(ctx, id)
@@ -102,16 +172,20 @@ async def process(client, ctx): # if message starts with command and matches par
         else:
             await ctx.reply(f'To check a balance, type \'{PREFIX}bal `user`\'')
 
+        return
+
     # check leaderboard
-    elif content in [PREFIX + x for x in ['lb', 'leaderboard']]:
+    if content in [PREFIX + x for x in ['lb', 'leaderboard']]:
         await check_leaderboard.run(ctx)
 
+        return
+
     # check game history
-    elif content.startswith(tuple(PREFIX + x for x in ('wl', 'winloss', 'gamehistory'))):
-        r = re.match(r'^(wl|winloss|gamehistory)( <@(\d{18,19})>)?$', content[len(PREFIX):])
+    game_hist_cmds = tuple(PREFIX + x for x in ('wl', 'winloss', 'gamehistory'))
+    if content.startswith(game_hist_cmds):
+        r = re_match(game_hist_cmds, user='optional')
         if r:
-            id = r.group(3)
-            id = int(id) if id else ctx.author.id
+            id = await to_userid(r.group(1)) if r.group(1) else ctx.author.id
 
             if await id_is_user(id):
                 await check_game_history.run(ctx, id)
@@ -119,9 +193,16 @@ async def process(client, ctx): # if message starts with command and matches par
         else:
             await ctx.reply(f'To check game history, type \'{PREFIX}wl `user`\'')
 
+        return
 
-async def startup():
+
+async def startup(client):
     userids = await userdata.get_all_users()
 
     for userid in userids:
-        await userdata.set_data(userid, ingame=False)
+        name = await userdata.get_data(userid, 'name')
+
+        if name == None:
+            name = client.get_user(userid).name
+
+        await userdata.set_data(userid, name=name, ingame=False)

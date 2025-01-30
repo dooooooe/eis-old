@@ -1,6 +1,8 @@
 {
-    "userid": 1085757087952404572,
-    "money": 10,
+    "userid": 298636636470771712,
+    "name": "cranberrymeii",
+    "nickname": null,
+    "money": 16,
     "ingame": false,
     "game_history": [
         "D",
@@ -24,8 +26,6 @@
         "D",
         "D"
     ],
-    "last_worked": 0,
-    "last_stolen": 1737988876.7907643,
-    "nickname": null,
-    "name": ".mrol_"
+    "last_worked": 1738224672.0961525,
+    "last_stolen": 0
 }

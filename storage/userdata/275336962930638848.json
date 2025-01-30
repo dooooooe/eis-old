@@ -1,7 +1,7 @@
 {
     "userid": 275336962930638848,
-    "money": 36,
-    "last_worked": 1738028791.8510947,
+    "money": 50,
+    "last_worked": 1738224625.9315188,
     "ingame": false,
     "game_history": [
         "W",
@@ -25,5 +25,7 @@
         "L",
         "W"
     ],
-    "last_stolen": 1738046643.9579077
+    "last_stolen": 1738230388.856557,
+    "nickname": "carc",
+    "name": "caarc"
 }

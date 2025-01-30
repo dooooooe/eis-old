@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f"{client.user.name}: hiii :3\n")
-    await eis.startup()
+    await eis.startup(client)
 
 # run
 @client.event

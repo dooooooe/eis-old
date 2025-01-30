@@ -7,7 +7,7 @@ async def run(ctx):
     data = await userdata.get_data(userid)
     last_worked = float(data['last_worked'])
 
-    cooldown = 120
+    cooldown = 600
     diff = time.time() - last_worked
     remaining = round(cooldown - diff)
 

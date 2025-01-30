@@ -1,5 +1,7 @@
 {
-    "userid": 1085757087952404572,
+    "userid": 318545703171391492,
+    "name": "swt1",
+    "nickname": null,
     "money": 10,
     "ingame": false,
     "game_history": [
@@ -24,8 +26,6 @@
         "D",
         "D"
     ],
-    "last_worked": 0,
-    "last_stolen": 1737988876.7907643,
-    "nickname": null,
-    "name": ".mrol_"
+    "last_worked": 1738224799.6540773,
+    "last_stolen": 0
 }

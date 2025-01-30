@@ -1,6 +1,6 @@
 {
     "userid": 757305600354025474,
-    "money": 457,
+    "money": 545,
     "ingame": false,
     "game_history": [
         "D",
@@ -24,6 +24,8 @@
         "L",
         "L"
     ],
-    "last_worked": 1738049858.3028088,
-    "last_stolen": 1738038940.734968
+    "last_worked": 1738230359.7434587,
+    "last_stolen": 1738224719.2174222,
+    "name": "cherrymeii",
+    "nickname": null
 }

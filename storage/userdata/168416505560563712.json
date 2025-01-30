@@ -1,6 +1,8 @@
 {
-    "userid": 1085757087952404572,
-    "money": 10,
+    "userid": 168416505560563712,
+    "name": "theedoo",
+    "nickname": "peedoo",
+    "money": 13,
     "ingame": false,
     "game_history": [
         "D",
@@ -25,7 +27,5 @@
         "D"
     ],
     "last_worked": 0,
-    "last_stolen": 1737988876.7907643,
-    "nickname": null,
-    "name": ".mrol_"
+    "last_stolen": 0
 }

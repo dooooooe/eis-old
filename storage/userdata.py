@@ -9,8 +9,10 @@ import aiofiles
 # setdata params
 
 class User:
-    def __init__(self, userid: int=-1, money: int=10, ingame: bool=False, game_history: list=['D' for _ in range(20)], last_worked: float=0, last_stolen: float=0):
+    def __init__(self, userid: int=-1, name: str=None, nickname: str=None, money: int=10, ingame: bool=False, game_history: list=['D' for _ in range(20)], last_worked: float=0, last_stolen: float=0):
         self.userid = userid
+        self.name = name
+        self.nickname = nickname
         self.money = money
         self.ingame = ingame
         self.game_history = game_history
@@ -20,6 +22,8 @@ class User:
     def to_dict(self):
         return {
             'userid': self.userid,
+            'name': self.name,
+            'nickname': self.nickname,
             'money': self.money,
             'ingame': self.ingame,
             'game_history': self.game_history,
@@ -47,7 +51,7 @@ async def init_user(userid):
             await f.write(json.dumps(user.to_dict(), indent=4))
 
 
-async def get_data(userid):
+async def get_data(userid, to_get=None):
     await init_user(userid)
     user_file = user_path(userid)
 
@@ -70,11 +74,15 @@ async def get_data(userid):
         
         for field in extraneous_fields:
             print(f'user {userid} has extraneous data \'{field}\' with value {data[field]}')
+    
+    if to_get is None:
+        return data
 
-    return data
+    else:
+        return data.get(to_get)
 
 
-async def set_data(userid, money=None, ingame=None, game_history=None, last_worked=None, last_stolen=None):
+async def set_data(userid, name: str=None, nickname: str=None, money: int=None, ingame: bool=None, game_history: list=None, last_worked: float=None, last_stolen: float=None):
     new_data = {key: value for key, value in locals().items() if key != "userid" and value is not None}
 
     await init_user(userid)
@@ -111,4 +119,4 @@ async def update_history(userid, history_type, entry):
 async def get_all_users():
     userids = [int(file.stem) for file in pathlib.Path("./storage/userdata").glob("*.json")]
 
-    return userids
+    return userids 

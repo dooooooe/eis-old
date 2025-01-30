@@ -2,6 +2,7 @@ import random
 import time
 import asyncio
 import collections
+import discord
 from storage import userdata
 
 class Maze: # chatgpt xd
@@ -170,7 +171,7 @@ async def run(ctx, client, userid, target):
         await ctx.reply(f'You must wait {time_string} to steal from {t_name}.')
         return
 
-    if t_bal < 40:
+    if t_bal < 50:
         await ctx.reply(f'{t_name} is too broke!')
         return
     
@@ -190,11 +191,24 @@ async def run(ctx, client, userid, target):
     await add_reactions(game, options.keys())
 
     success = False
-    timeout = m.shortest_path()
+    timeout = m.shortest_path() + 2
     start_time = time.time()
     
     async def timer():
         await asyncio.sleep(timeout)
+
+
+    async def check_reactions():
+        while True:
+            message = await game.channel.fetch_message(game.id)  # Fetch latest message state
+            bot_reactions = {reaction.emoji for reaction in message.reactions if reaction.me}  # Bot's reactions
+
+            for emoji in options.keys():  # Check expected reactions
+                if emoji not in bot_reactions:  # If missing, re-add
+                    await game.add_reaction(emoji)
+                    await game.channel.send(file=discord.File("./storage/images/reaction_removed.png"))
+
+            await asyncio.sleep(1)  # Check every second
 
 
     async def game_loop():
@@ -214,8 +228,8 @@ async def run(ctx, client, userid, target):
                 break
 
 
-    tasks = [asyncio.create_task(game_loop()), asyncio.create_task(timer())]
-    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+    loop_tasks = [asyncio.create_task(game_loop()), asyncio.create_task(check_reactions()), asyncio.create_task(timer())]
+    done, pending = await asyncio.wait(loop_tasks, return_when=asyncio.FIRST_COMPLETED)
 
     for task in pending:
         task.cancel()
@@ -227,7 +241,7 @@ async def run(ctx, client, userid, target):
 
         await game.edit(content=f'**{t_name}\'s vault**\n' + m.to_discord() + f'\nYou successfully stole 💰 from {t_name} in {heist_time} seconds!')
 
-        stolen_percent = random.uniform(5, 10) / 100
+        stolen_percent = random.uniform(10, 15) / 100
         stolen = round(t_bal * stolen_percent)
 
         await game.add_reaction('💰')
@@ -244,9 +258,13 @@ async def run(ctx, client, userid, target):
         await userdata.set_data(target, money=t_bal - stolen)
 
         await game.edit(content=f'**{t_name}\'s vault**\n' + m.to_discord() + f'\nYou successfully stole {stolen} bits from {t_name} in {heist_time} seconds!')
+        with open('./storage/steal/steal_log.txt', 'a') as file:
+            file.write('1')
 
     else:
         await game.edit(content=f'**{t_name}\'s vault**\n' + m.to_discord() + f'\nHeist unsuccessful...')
+        with open('./storage/steal/steal_log.txt', 'a') as file:
+            file.write('0')
 
     await userdata.set_data(target, last_stolen=time.time())
 
