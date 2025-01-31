@@ -109,5 +109,5 @@ async def process(client, ctx):
 
         else:
             await ctx.reply('eis setnick `user` `name`')
-
-        return
+    
+        return 
