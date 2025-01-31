@@ -1,0 +1,38 @@
+name: Deploy to Oracle Cloud VM
+
+on:
+  push:
+    branches:
+      - main  # Adjust if using a different branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy and Restart Main.py
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+            cd /path/to/your/project  # Adjust the path
+            git pull origin main  # Pull latest changes
+            pkill -f main.py || true  # Kill the running process
+            nohup python3 main.py > output.log 2>&1 &  # Restart the script
+          EOF
+
+      - name: Copy systemd service file to VM
+        run: |
+          scp -i ~/.ssh/id_rsa systemd/mainbot.service ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/etc/systemd/system/mainbot.service
+
+      - name: Enable and Restart systemd service
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "sudo systemctl daemon-reload && sudo systemctl enable mainbot && sudo systemctl restart mainbot"

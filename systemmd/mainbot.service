@@ -1,0 +1,13 @@
+[Unit]
+Description=Discord Bot Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /path/to/your/project/main.py
+WorkingDirectory=/path/to/your/project
+Restart=always
+User=opc  # Change if using a different user
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
