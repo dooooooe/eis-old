@@ -3,7 +3,7 @@ Description=Discord Bot Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/opc/eis-main/main.py
+ExecStart=/usr/bin/python3.9 /home/opc/eis-main/main.py
 WorkingDirectory=/home/opc/eis-main
 Restart=always
 User=opc  # Change if using a different user
