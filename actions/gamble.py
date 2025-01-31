@@ -36,7 +36,7 @@ async def run(ctx, wager):
 
     payout = 0
 
-    if len(set([one, two, three])) == 1: # jackpot 
+    if len(set([one, two, three])) == 1: # jackpot x3 cheese x17
         if one == '🧀':
             payout = 17
 
