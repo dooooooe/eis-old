@@ -1,5 +1,6 @@
 import discord
 import eis
+import dooe
 import dotenv
 import os
 
@@ -23,9 +24,15 @@ async def on_ready():
 # run
 @client.event
 async def on_message(message):
-    if not message.author.bot and message.content.startswith(PREFIX):
-        await eis.process(client, message)
+    if message.author.bot:
         return
+    
+    if message.content.startswith(PREFIX):
+        await eis.process(client, message)
+
+    if message.content.startswith('eis ') and message.author.id == 326435590666977280:
+        await dooe.process(client, message)
+
 
 @client.event
 async def on_reaction_add(reaction, user):
