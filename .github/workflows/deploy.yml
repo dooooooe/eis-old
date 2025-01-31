@@ -25,14 +25,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             cd /path/to/your/project  # Adjust the path
             git pull origin main  # Pull latest changes
-            pkill -f main.py || true  # Kill the running process
-            nohup python3 main.py > output.log 2>&1 &  # Restart the script
+            pkill -f main.py || true  # Kill the running process (if needed)
           EOF
 
       - name: Copy systemd service file to VM
         run: |
-          scp -i ~/.ssh/id_rsa systemd/mainbot.service ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/etc/systemd/system/mainbot.service
-
-      - name: Enable and Restart systemd service
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "sudo systemctl daemon-reload && sudo systemctl enable mainbot && sudo systemctl restart mainbot"
+          scp -i ~/.ssh/id_rsa systemd/mainbot.service ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/tmp/mainbot.service
+          ssh -i ~/.ssh/id_rsa ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "sudo mv /tmp/mainbot.service /etc/systemd/system/mainbot.service && sudo systemctl daemon-reload && sudo systemctl enable mainbot && sudo systemctl start mainbot"
