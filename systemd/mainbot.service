@@ -6,8 +6,9 @@ After=network.target
 ExecStart=/usr/bin/python3.9 /home/opc/eis-main/main.py
 WorkingDirectory=/home/opc/eis-main
 Restart=always
-User=opc  # Change if using a different user
+User=opc
 Environment="PYTHONUNBUFFERED=1"
+Environment="PATH=/home/opc/.local/bin:$PATH"  # Ensure the local Python packages are in the path
 
 [Install]
 WantedBy=multi-user.target
