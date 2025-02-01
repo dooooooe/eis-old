@@ -116,7 +116,7 @@ async def process(client, ctx): # if message starts with command and matches par
         if r:
             wager = r.group(1) if r.group(1) else 1
 
-            if '%' in wager:
+            if '%' in str(wager):
                 wager = int(wager[:-1])/100
                 if wager > 0.25:
                     ctx.reply(r'You cannot bet over 25% of your total balance with a percent value! Use the actual number to ensure you know just how much you are betting!')
@@ -141,7 +141,7 @@ async def process(client, ctx): # if message starts with command and matches par
         if r:
             wager = r.group(1) if r.group(1) else 1
 
-            if '%' in wager:
+            if '%' in str(wager):
                 wager = int(wager[:-1])/100
                 if wager > 0.25:
                     ctx.reply(r'You cannot bet over 25% of your total balance with a percent value! Use the actual number to ensure you know just how much you are betting!')
