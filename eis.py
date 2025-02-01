@@ -114,7 +114,7 @@ async def process(client, ctx): # if message starts with command and matches par
     if content.startswith(coinflip_cmds):
         r = re_match(coinflip_cmds, value='optional', percent=True)
         if r:
-            wager = r.group(1) or 1
+            wager = r.group(1) if r.group(1) else 1
 
             if '%' in wager:
                 wager = int(wager[:-1])/100
@@ -139,7 +139,7 @@ async def process(client, ctx): # if message starts with command and matches par
     if content.startswith(gamble_cmds):
         r = re_match(gamble_cmds, value='optional', percent=True)
         if r:
-            wager = r.group(1) or 1
+            wager = r.group(1) if r.group(1) else 1
 
             if '%' in wager:
                 wager = int(wager[:-1])/100

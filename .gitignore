@@ -1,4 +1,5 @@
 .env
 .gitignore
 retrieve_data.bat
+todo.txt
 /storage/userdata/
