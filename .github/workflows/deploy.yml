@@ -23,7 +23,7 @@ jobs:
       - name: Deploy and Restart Main.py
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
-            cd home/opc/eis-main  # Adjust the path
+            cd /home/opc/eis-main  # Adjust the path
             git pull origin main  # Pull latest changes
             pkill -f main.py || true  # Kill the running process (if needed)
           EOF
