@@ -1,0 +1,13 @@
+{
+    "symbol": "SHT",
+    "price": 20,
+    "variance": 4,
+    "EV": 10,
+    "dt": 0.003472222222222222,
+    "type": "coin",
+    "desc": "shitcoin #4",
+    "history": [
+        20
+    ],
+    "owners": []
+}

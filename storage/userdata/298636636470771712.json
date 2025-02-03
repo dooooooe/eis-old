@@ -2,7 +2,7 @@
     "userid": 298636636470771712,
     "name": "cranberrymeii",
     "nickname": null,
-    "money": 16,
+    "money": 26,
     "ingame": false,
     "game_history": [
         "D",
@@ -24,9 +24,10 @@
         "D",
         "D",
         "D",
-        "D"
+        "D",
+        "W"
     ],
-    "last_worked": 1738224672.0961525,
+    "last_worked": 1738382348.8015935,
     "last_stolen": 0,
     "gambling": false
 }

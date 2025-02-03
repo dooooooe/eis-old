@@ -1,0 +1,13 @@
+{
+    "symbol": "INT",
+    "price": 70,
+    "variance": 10,
+    "EV": -1,
+    "dt": 0.003472222222222222,
+    "type": "coin",
+    "desc": "neva int",
+    "history": [
+        70
+    ],
+    "owners": []
+}

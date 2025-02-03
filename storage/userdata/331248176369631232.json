@@ -1,6 +1,6 @@
 {
     "userid": 331248176369631232,
-    "money": 23,
+    "money": 22,
     "ingame": false,
     "game_history": [
         "D",
@@ -22,9 +22,10 @@
         "D",
         "D",
         "L",
+        "L",
         "L"
     ],
-    "last_worked": 1738360852.323454,
+    "last_worked": 1738391106.597804,
     "last_stolen": 0,
     "nickname": null,
     "name": "chowch",

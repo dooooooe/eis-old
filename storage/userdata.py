@@ -5,8 +5,18 @@ import aiofiles
 
 # make sure to update if updating fields: 
 # user init params
-# user todict dictionary
 # setdata params
+
+
+class Inventory:
+    def __init__(self, items: dict={}, portfolio: dict={}):
+        self.items = items
+        self.portfolio = portfolio
+
+    
+    def to_dict(self):
+        return {key: value for key, value in vars(self).items()}
+
 
 class User:
     def __init__(self, userid: int=-1, name: str=None, nickname: str=None, money: int=10, ingame: bool=False, gambling: bool=False, game_history: list=['D' for _ in range(50)], last_worked: float=0, last_stolen: float=0):
@@ -19,19 +29,15 @@ class User:
         self.game_history = game_history
         self.last_worked = last_worked
         self.last_stolen = last_stolen
+        
+        self.inventory = {
+            'items': dict(), 
+            'portfolio': dict()
+                          }
+
 
     def to_dict(self):
-        return {
-            'userid': self.userid,
-            'name': self.name,
-            'nickname': self.nickname,
-            'money': self.money,
-            'ingame': self.ingame,
-            'game_history': self.game_history,
-            'gambling': self.gambling,
-            'last_worked': self.last_worked,
-            'last_stolen': self.last_stolen
-        }
+        return {key: value for key, value in vars(self).items()}
 
 
 def user_path(userid):
@@ -84,7 +90,7 @@ async def get_data(userid, to_get=None):
         return data.get(to_get)
 
 
-async def set_data(userid, name: str=None, nickname: str=None, money: int=None, ingame: bool=None, gambling: bool=None, game_history: list=None, last_worked: float=None, last_stolen: float=None):
+async def set_data(userid, name: str=None, nickname: str=None, money: int=None, ingame: bool=None, gambling: bool=None, game_history: list=None, last_worked: float=None, last_stolen: float=None, inventory: dict=None):
     new_data = {key: value for key, value in locals().items() if key != "userid" and value is not None}
 
     await init_user(userid)
@@ -99,13 +105,27 @@ async def set_data(userid, name: str=None, nickname: str=None, money: int=None, 
         await f.write(json.dumps(data, indent=4))
 
 
+async def adjust_inventory(userid, category, item, amount):
+    data = await get_data(userid)
+    inventory = data['inventory']
+
+    if not inventory.get(category):
+        inventory[category] = {}
+
+    if not inventory[category].get(item):
+        inventory[category][item] = 0
+
+    inventory[category][item] += amount
+
+    if inventory[category][item] == 0:
+        del inventory[category][item]
+
+    await set_data(userid, inventory=inventory)
+
+
 async def update_history(userid, history_type, entry):
     data = await get_data(userid)
-
-    try:
-        history = data[history_type]
-    except KeyError:
-        return
+    history = data[history_type]
     
     if len(history) == 50:
         del history[0]

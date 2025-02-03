@@ -1,0 +1,13 @@
+{
+    "symbol": "EIS",
+    "price": 20,
+    "variance": 0.5,
+    "EV": 0.03,
+    "dt": 0.003472222222222222,
+    "type": "stock",
+    "desc": "This stock is EIS certified",
+    "history": [
+        20
+    ],
+    "owners": []
+}

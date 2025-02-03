@@ -1,0 +1,13 @@
+{
+    "symbol": "BTC",
+    "price": 85.29,
+    "variance": 2,
+    "EV": 0.5,
+    "dt": 0.003472222222222222,
+    "type": "coin",
+    "desc": "bitcoin is future",
+    "history": [
+        100
+    ],
+    "owners": []
+}

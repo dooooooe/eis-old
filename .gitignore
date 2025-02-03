@@ -1,4 +1,6 @@
 .env
 .gitignore
 retrieve_data.bat
-todo.txt
+retrieve_stocks.bat
+todo.md
+tempCodeRunnerFile.py

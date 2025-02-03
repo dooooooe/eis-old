@@ -1,0 +1,13 @@
+{
+    "symbol": "NUNU",
+    "price": 5,
+    "variance": 0.5,
+    "EV": 0.1,
+    "dt": 0.003472222222222222,
+    "type": "stock",
+    "desc": "nuu willum",
+    "history": [
+        5
+    ],
+    "owners": []
+}

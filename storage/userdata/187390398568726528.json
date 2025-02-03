@@ -1,6 +1,6 @@
 {
     "userid": 187390398568726528,
-    "money": 28,
+    "money": 45,
     "ingame": false,
     "game_history": [
         "D",
@@ -24,9 +24,11 @@
         "W",
         "L",
         "W",
+        "W",
+        "L",
         "W"
     ],
-    "last_worked": 1738371306.259325,
+    "last_worked": 1738382554.6597621,
     "last_stolen": 0,
     "nickname": null,
     "name": "vacume",

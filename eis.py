@@ -1,13 +1,16 @@
 import re
 import dotenv
 import os
-from storage import userdata
-from actions import work, give, steal, coinflip, gamble, connect_four, nickname, check_balance, check_leaderboard, check_game_history
+import asyncio
+from storage import userdata, stocks
+from actions import work, give, steal, coinflip, gamble, connect_four, nickname, inventory, check_balance, check_leaderboard, check_game_history, market
 
 dotenv.load_dotenv()
 PREFIX = os.getenv('PREFIX')
 
 async def process(client, ctx): # if message starts with command and matches param regex, grab params and run associated command
+    await ctx.channel.send('hi! this is a test build of eis and shown userdata may not be up to date; additionally, transactions made on the test build will not be recorded on the live build')
+
     off_channels = [1080247854922203146]
     if ctx.channel.id in off_channels:
         return
@@ -192,6 +195,11 @@ async def process(client, ctx): # if message starts with command and matches par
             await ctx.reply(f'To set your nickname, type \'{PREFIX}nickname `name`\'')
 
         return
+    
+    # inventory
+    inv_cmds = tuple(PREFIX + x for x in ('inventory', 'inv', 'checkinv', 'checkinventory'))
+    if content in (inv_cmds):
+        await inventory.run(ctx)
 
     # check balance
     bal_cmds = tuple(PREFIX + x for x in ('bal', 'balance', 'money', 'bits'))
@@ -229,6 +237,11 @@ async def process(client, ctx): # if message starts with command and matches par
             await ctx.reply(f'To check game history, type \'{PREFIX}wl `user`\'')
 
         return
+    
+    # stocks
+    stocks_cmds = tuple(PREFIX + x for x in ('stocks', 'stock', 'market'))
+    if content.startswith(stocks_cmds):
+        await market.run(ctx, client, content, stocks_cmds)
 
 
 async def startup(client):
@@ -241,3 +254,17 @@ async def startup(client):
             name = client.get_user(userid).name
 
         await userdata.set_data(userid, name=name, ingame=False, gambling=False)
+
+    await continuous_tasks()
+
+
+async def continuous_tasks():
+    
+    async def tick_all_stocks():
+        while True:
+            await asyncio.sleep(300)
+            for symbol in stocks.get_all_stocks():
+                await stocks.tick_stock(symbol)
+            
+            
+    asyncio.create_task(tick_all_stocks())
