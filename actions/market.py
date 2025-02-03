@@ -162,8 +162,10 @@ async def market_str():
         price_change = get_price_change(stock['history'][-288:])
         trend = get_trend(price_change)
 
+        positive = '+' if price_change > 0 else ''
+
         nonlocal d_str
-        d_str += f'{trend} **{symbol}** - {price} ({'+' if price_change > 0 else ''}{price_change}%)\n'
+        d_str += f'{trend} **{symbol}** - {price} ({positive}{price_change}%)\n'
 
 
     d_str += '**Stocks:**\n'
