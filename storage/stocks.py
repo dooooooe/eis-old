@@ -6,11 +6,10 @@ import math
 import string
 import aiofiles
 import asyncio
-import pathlib
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as path_effects
 import pandas as pd
-# from storage import userdata
+from storage import userdata
 
 class Stock:
     def __init__(self, symbol: str, price: float=10, variance: float=0.2, EV: float=0, type: str='stock', desc: str='', history: list=[], owners: list=[]):
