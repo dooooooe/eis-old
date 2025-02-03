@@ -33,5 +33,9 @@
     "last_stolen": 1738436304.9978664,
     "nickname": "carc",
     "name": "caarc",
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }

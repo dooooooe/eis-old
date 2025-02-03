@@ -28,5 +28,9 @@
     "last_stolen": 1737988876.7907643,
     "nickname": null,
     "name": ".mrol_",
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }

@@ -28,5 +28,9 @@
     "last_stolen": 1738421008.5136302,
     "name": "cherrymeii",
     "nickname": "help",
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }

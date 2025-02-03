@@ -29,5 +29,9 @@
     "last_stolen": 0,
     "nickname": null,
     "name": "chowch",
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }

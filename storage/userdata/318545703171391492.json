@@ -28,5 +28,9 @@
     ],
     "last_worked": 1738224799.6540773,
     "last_stolen": 0,
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }

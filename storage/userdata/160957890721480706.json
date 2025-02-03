@@ -35,5 +35,9 @@
     "last_stolen": 1738371366.2451875,
     "nickname": "angel",
     "name": "emiwoof",
-    "gambling": false
+    "gambling": false,
+    "inventory": {
+        "items": {},
+        "portfolio": {}
+    }
 }
