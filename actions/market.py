@@ -85,7 +85,9 @@ async def view(ctx, stock):
     desc = stock['desc']
     graph = discord.File(await stocks.to_graph(symbol), f'{symbol} graph.png')
 
-    await ctx.reply(f"**{symbol}** ({trend})\nValuation: {price} bits\n\nShort Trend: {'+' if price_change > 0 else ''}{price_change}%\nLong Trend: {'+' if full_price_change > 0 else ''}{full_price_change}%\n\nVolatility: {volatility}\nDrift: {ev}\n\n'*{desc}*'", file=graph)
+    positive = '+' if price_change > 0 else ''
+
+    await ctx.reply(f"**{symbol}** ({trend})\nValuation: {price} bits\n\nShort Trend: {price_change}%\nLong Trend: {positive}{full_price_change}%\n\nVolatility: {volatility}\nDrift: {ev}\n\n'*{desc}*'", file=graph)
 
 async def buy(ctx, stock, amount):
     userid = ctx.author.id
