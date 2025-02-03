@@ -9,7 +9,7 @@ dotenv.load_dotenv()
 PREFIX = os.getenv('PREFIX')
 
 async def process(client, ctx): # if message starts with command and matches param regex, grab params and run associated command
-    await ctx.channel.send('hi! this is a test build of eis and shown userdata may not be up to date; additionally, transactions made on the test build will not be recorded on the live build')
+    # await ctx.channel.send('hi! this is a test build of eis and shown userdata may not be up to date; additionally, transactions made on the test build will not be recorded on the live build')
 
     off_channels = [1080247854922203146]
     if ctx.channel.id in off_channels:

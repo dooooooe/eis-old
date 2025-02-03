@@ -33,7 +33,7 @@ async def run(ctx, client, content, cmds):
     
     # buy
     if content.startswith(prefix + 'buy '):
-        r = re.match(f'{prefix}buy ' + r'(.+) (\d+)?', content)
+        r = re.match(f'{prefix}buy ' + r'(.+)(?: (\d+))?', content)
 
         if not r:
             await ctx.reply('To buy a stock, type \'estock buy `stock` `amount`\'')
@@ -48,12 +48,12 @@ async def run(ctx, client, content, cmds):
         else:
             await ctx.reply('Stock not found!')
             return
-        
+    
         return
     
     # sell
     if content.startswith(prefix + 'sell '):
-        r = re.match(f'{prefix}sell ' + r'(.+) (\d+)?', content)
+        r = re.match(f'{prefix}sell ' + r'(.+)(?: (\d+))?', content)
 
         if not r:
             await ctx.reply('To sell a stock, type \'estock sell `stock` `amount`\'')
@@ -89,6 +89,7 @@ async def view(ctx, stock):
 
     await ctx.reply(f"**{symbol}** ({trend})\nValuation: {price} bits\n\nShort Trend: {price_change}%\nLong Trend: {positive}{full_price_change}%\n\nVolatility: {volatility}\nDrift: {ev}\n\n'*{desc}*'", file=graph)
 
+
 async def buy(ctx, stock, amount):
     userid = ctx.author.id
     balance = await userdata.get_data(userid, 'money')
@@ -104,7 +105,7 @@ async def buy(ctx, stock, amount):
     
     await userdata.set_data(userid, money=balance - cost)
     await userdata.adjust_inventory(userid, 'portfolio', symbol, amount)
-    await stocks.set_stock(symbol, owners=set(stock['owners'] + [userid]))
+    await stocks.set_stock(symbol, owners=list(set(stock['owners'] + [userid])))
 
     await ctx.reply(f'Purchased {amount} shares of {symbol} for {cost} bits!')
 
@@ -128,7 +129,7 @@ async def sell(ctx, stock, amount):
         await userdata.adjust_inventory(userid, 'portfolio', symbol, -amount)
 
         if owned == amount:
-            await stocks.set_stock(symbol, owners=stock['owners'] - [userid])
+            await stocks.set_stock(symbol, owners=stock['owners'].remove(userid))
 
         await ctx.reply(f'Sold {amount} shares of {symbol} for {profit} bits')
 
