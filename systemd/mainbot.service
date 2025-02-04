@@ -8,7 +8,7 @@ WorkingDirectory=/home/opc/eis-main
 Restart=always
 User=opc
 Environment="PYTHONUNBUFFERED=1"
-Environment="PATH=/home/opc/.local/bin:$PATH"  # Ensure the local Python packages are in the path
+Environment="PATH=/home/opc/.local/bin:$PATH"
 
 [Install]
 WantedBy=multi-user.target
