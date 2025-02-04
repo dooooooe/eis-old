@@ -160,7 +160,6 @@ async def init_stock(symbol: str, price: float=10, variance: float=0.2, EV: floa
 async def get_stock(symbol):
     stock_file = stock_path(symbol)
 
-    print(stock_file)
     if not os.path.exists(stock_file):
         return None
 
@@ -407,6 +406,8 @@ stock.plot()
 asyncio.run(init_stock('NUNU', 5, 0.5, 0.1, 'stock', 'nuu willum'))
 '''
 
-# GEN RANDOM COIN
 
+'''
+# GEN RANDOM COIN
 asyncio.run(gen_coin())
+'''

@@ -5,10 +5,11 @@ async def run(ctx):
 
     stock_values = {}
 
-    for stock in stocks.get_all_stocks():
-        price = await stocks.get_stock(stock)['price']
+    for symbol in stocks.get_all_stocks():
+        stock = await stocks.get_stock(symbol)
+        price = stock['price']
 
-        stock_values[stock] = price
+        stock_values[symbol] = price
 
     lb = []
 
@@ -24,7 +25,7 @@ async def run(ctx):
 
         net_worth = bal + portfolio_value
 
-        lb.append((net_worth, name))
+        lb.append((round(net_worth), name))
 
     lb.sort(key=lambda x: -x[0])
 
