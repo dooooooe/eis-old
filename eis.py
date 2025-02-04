@@ -16,7 +16,12 @@ async def process(client, ctx): # if message starts with command and matches par
         return
     
     content = ctx.content
-    print(content)
+    
+    log_str = f'[{ctx.guild}] {ctx.author}: {content}\n'
+    print(log_str)
+    with open('log.txt', 'a') as f:
+        f.write(log_str)
+    
         
     def re_match(commands, user=None, value=None, percent=None, string=None, freaky=None):
         pattern = r'^' + '(?:' + '|'.join(re.escape(command) for command in commands) + ')'

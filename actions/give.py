@@ -1,6 +1,10 @@
 from storage import userdata
 
 async def run(ctx, userid, recipient, value):
+    if userid == recipient:
+        await ctx.reply(f'You gave yourself {value} bits!')
+        return
+
     u_data = await userdata.get_data(userid)
     u_bal = u_data['money']
 
