@@ -1,7 +1,7 @@
 {
     "userid": 326435590666977280,
-    "money": 375,
-    "last_worked": 1738593705.3610723,
+    "money": 170,
+    "last_worked": 1738655253.516384,
     "game_history": [
         "W",
         "L",
@@ -61,6 +61,9 @@
     "gambling": false,
     "inventory": {
         "items": {},
-        "portfolio": {}
+        "portfolio": {
+            "NUNU": 21,
+            "SHT": 1
+        }
     }
 }

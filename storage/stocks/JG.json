@@ -1,0 +1,16 @@
+{
+    "symbol": "JG",
+    "price": 141.01,
+    "variance": 4.31,
+    "EV": 0.42,
+    "dt": 0.003472222222222222,
+    "type": "coin",
+    "desc": "bro no one knows shit about fuck just HODL.",
+    "history": [
+        95,
+        102.99,
+        113.33,
+        141.01
+    ],
+    "owners": []
+}

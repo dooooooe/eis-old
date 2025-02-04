@@ -1,7 +1,14 @@
-from storage import userdata
+from storage import userdata, stocks
 
 async def run(ctx):
     userids = await userdata.get_all_users()
+
+    stock_values = {}
+
+    for stock in stocks.get_all_stocks():
+        price = await stocks.get_stock(stock)['price']
+
+        stock_values[stock] = price
 
     lb = []
 
@@ -9,12 +16,19 @@ async def run(ctx):
         data = await userdata.get_data(userid)
         name = ctx.guild.get_member(userid).name  
         bal = data['money']
+        portfolio = data['inventory']['portfolio']
 
-        lb.append((bal, name))
+        portfolio_value = 0
+        for stock, amount in portfolio.items():
+            portfolio_value += stock_values[stock] * amount
+
+        net_worth = bal + portfolio_value
+
+        lb.append((net_worth, name))
 
     lb.sort(key=lambda x: -x[0])
 
-    lb_str = '## **eis Leaderboard**\n'
+    lb_str = '## **eis Net Worth Leaderboard**\n'
     counter = 0
     
     for user in lb:

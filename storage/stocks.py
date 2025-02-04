@@ -9,7 +9,7 @@ import asyncio
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as path_effects
 import pandas as pd
-from storage import userdata
+#from storage import userdata
 
 class Stock:
     def __init__(self, symbol: str, price: float=10, variance: float=0.2, EV: float=0, type: str='stock', desc: str='', history: list=[], owners: list=[]):
@@ -215,7 +215,7 @@ async def tick_stock(symbol):
 
 
 async def gen_coin(name=None):
-    current = await get_all_stocks()
+    current = get_all_stocks()
 
     if name and name not in current:
         symbol = name
@@ -398,7 +398,7 @@ for i in range(2016):
     if stock.price < 1:
         break
 
-stock.plot()
+stock.plot()    
 '''
 
 
@@ -406,3 +406,7 @@ stock.plot()
 # CREATE STOCKS:
 asyncio.run(init_stock('NUNU', 5, 0.5, 0.1, 'stock', 'nuu willum'))
 '''
+
+# GEN RANDOM COIN
+
+asyncio.run(gen_coin())

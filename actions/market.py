@@ -39,7 +39,7 @@ async def run(ctx, client, content, cmds):
             await ctx.reply('To buy a stock, type \'estock buy `stock` `amount`\'')
             return
 
-        stock = await stocks.get_stock(r.group(1))
+        stock = await stocks.get_stock(r.group(1).upper())
         amount = int(r.group(2)) if r.group(2) else 1
 
         if stock:
@@ -59,7 +59,7 @@ async def run(ctx, client, content, cmds):
             await ctx.reply('To sell a stock, type \'estock sell `stock` `amount`\'')
             return
 
-        stock = await stocks.get_stock(r.group(1))
+        stock = await stocks.get_stock(r.group(1).upper())
         amount = int(r.group(2)) if r.group(2) else 1
 
         if stock:
