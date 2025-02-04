@@ -137,7 +137,7 @@ def stock_path(symbol):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     
-    return os.path.join(folder_path, f'{symbol}.json')
+    return os.path.join(folder_path, f'{symbol.upper()}.json')
 
 
 def get_all_stocks():
@@ -160,6 +160,7 @@ async def init_stock(symbol: str, price: float=10, variance: float=0.2, EV: floa
 async def get_stock(symbol):
     stock_file = stock_path(symbol)
 
+    print(stock_file)
     if not os.path.exists(stock_file):
         return None
 

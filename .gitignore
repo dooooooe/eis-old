@@ -2,5 +2,7 @@
 .gitignore
 retrieve_data.bat
 retrieve_stocks.bat
+retrieve_log.bat
 todo.md
+log.txt
 tempCodeRunnerFile.py
