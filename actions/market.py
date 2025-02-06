@@ -33,7 +33,7 @@ async def run(ctx, client, content, cmds):
     
     # buy
     if content.startswith(prefix + 'buy '):
-        r = re.match(f'{prefix}buy ' + r'(.+)(?: (\d+))?', content)
+        r = re.match(f'{prefix}buy ' + r'(\w+)(?: (\d+))?', content)
 
         if not r:
             await ctx.reply('To buy a stock, type \'estock buy `stock` `amount`\'')
@@ -53,7 +53,7 @@ async def run(ctx, client, content, cmds):
     
     # sell
     if content.startswith(prefix + 'sell '):
-        r = re.match(f'{prefix}sell ' + r'(.+)(?: (\d+))?', content)
+        r = re.match(f'{prefix}sell ' + r'(\w+)(?: (\d+))?', content)
 
         if not r:
             await ctx.reply('To sell a stock, type \'estock sell `stock` `amount`\'')
@@ -86,8 +86,9 @@ async def view(ctx, stock):
     graph = discord.File(await stocks.to_graph(symbol), f'{symbol} graph.png')
 
     positive = '+' if price_change > 0 else ''
+    full_positive = '+' if full_price_change > 0 else ''
 
-    await ctx.reply(f"**{symbol}** ({trend})\nValuation: {price} bits\n\nShort Trend: {price_change}%\nLong Trend: {positive}{full_price_change}%\n\nVolatility: {volatility}\nDrift: {ev}\n\n'*{desc}*'", file=graph)
+    await ctx.reply(f"**{symbol}** ({trend})\nValuation: {price} bits\n\nShort Trend: {positive}{price_change}%\nLong Trend: {full_positive}{full_price_change}%\n\nVolatility: {volatility}\nDrift: {ev}\n\n'*{desc}*'", file=graph)
 
 
 async def buy(ctx, stock, amount):
@@ -129,7 +130,12 @@ async def sell(ctx, stock, amount):
         await userdata.adjust_inventory(userid, 'portfolio', symbol, -amount)
 
         if owned == amount:
-            await stocks.set_stock(symbol, owners=stock['owners'].remove(userid))
+            owners = stock['owners']
+            
+            if userid in owners:
+                owners.remove(userid)
+
+            await stocks.set_stock(symbol, owners=owners)
 
         await ctx.reply(f'Sold {amount} shares of {symbol} for {profit} bits')
 

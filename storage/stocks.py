@@ -9,7 +9,7 @@ import asyncio
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as path_effects
 import pandas as pd
-#from storage import userdata
+from storage import userdata
 
 class Stock:
     def __init__(self, symbol: str, price: float=10, variance: float=0.2, EV: float=0, type: str='stock', desc: str='', history: list=[], owners: list=[]):
@@ -201,7 +201,8 @@ async def tick_stock(symbol):
         elif stock.type in ['crypto', 'coin']:
             for owner in stock.owners:
                 inventory = await userdata.get_data(owner, 'inventory')
-                owned = inventory['portfolio'][symbol]
+                owned = inventory['portfolio'].get(symbol)
+                
 
                 await userdata.adjust_inventory(owner, 'portfolio', symbol, -owned)
 
@@ -221,7 +222,7 @@ async def gen_coin(name=None):
 
     else:
         while True:
-            symbol = ''.join(random.choices(string.ascii_uppercase, k=random.randint(2, 5)))
+            symbol = ''.join(random.choices(string.ascii_uppercase, k=random.randint(2, 4)))
             if symbol not in current:
                 break
 
@@ -388,7 +389,7 @@ async def to_graph(symbol, time_steps=None):
 '''
 # SIMULATE STOCKS:
 
-stock = Stock('SHT', 20, 4, 5, 'coin', 'shitcoin #4')
+stock = Stock('SHT', 20, 4, 10, 'coin', 'shitcoin #4')
 
 for i in range(2016):
     print(i)

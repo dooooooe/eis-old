@@ -1,7 +1,7 @@
 {
     "userid": 160957890721480706,
-    "money": 369,
-    "last_worked": 1738382546.0824394,
+    "money": 10,
+    "last_worked": 1738733263.7739038,
     "ingame": false,
     "game_history": [
         "L",
@@ -32,12 +32,15 @@
         "L",
         "W"
     ],
-    "last_stolen": 1738635034.5873656,
+    "last_stolen": 1738707978.6773036,
     "nickname": "angel",
     "name": "emiwoof",
     "gambling": false,
     "inventory": {
         "items": {},
-        "portfolio": {}
+        "portfolio": {
+            "DOOE": 2,
+            "APO": 1
+        }
     }
 }

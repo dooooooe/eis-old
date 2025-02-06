@@ -1,7 +1,7 @@
 {
     "userid": 275336962930638848,
-    "money": 87,
-    "last_worked": 1738635456.6058576,
+    "money": 180,
+    "last_worked": 1738830013.7329566,
     "ingame": false,
     "game_history": [
         "W",
@@ -28,17 +28,18 @@
         "W",
         "W",
         "L",
+        "L",
+        "L",
         "L"
     ],
-    "last_stolen": 1738436304.9978664,
+    "last_stolen": 1738732700.8586614,
     "nickname": "carc",
     "name": "caarc",
     "gambling": false,
     "inventory": {
         "items": {},
         "portfolio": {
-            "NUNU": 9,
-            "SHT": 1
+            "BTC": 3
         }
     }
 }
