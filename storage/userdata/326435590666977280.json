@@ -1,7 +1,7 @@
 {
     "userid": 326435590666977280,
-    "money": 596,
-    "last_worked": 1738831484.9082317,
+    "money": 730,
+    "last_worked": 1738895760.2050366,
     "game_history": [
         "L",
         "W",
@@ -55,16 +55,14 @@
         "L"
     ],
     "ingame": false,
-    "last_stolen": 1738830048.6201038,
+    "last_stolen": 1738886902.8618941,
     "nickname": "doe",
     "name": "dooe",
     "gambling": false,
     "inventory": {
         "items": {},
         "portfolio": {
-            "EIS": 10,
-            "NUNU": 10,
-            "DOOE": 5
+            "NUNU": 70
         }
     }
 }

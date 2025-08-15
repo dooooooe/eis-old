@@ -1,7 +1,7 @@
 {
     "userid": 275336962930638848,
-    "money": 180,
-    "last_worked": 1738830013.7329566,
+    "money": 27,
+    "last_worked": 1738894928.5447383,
     "ingame": false,
     "game_history": [
         "W",
@@ -30,6 +30,7 @@
         "L",
         "L",
         "L",
+        "L",
         "L"
     ],
     "last_stolen": 1738732700.8586614,
@@ -39,7 +40,7 @@
     "inventory": {
         "items": {},
         "portfolio": {
-            "BTC": 3
+            "NUNU": 30
         }
     }
 }

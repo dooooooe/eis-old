@@ -33,7 +33,6 @@ async def run(ctx, wager):
         await game.edit(content=f'**Slots**\n1️⃣2️⃣3️⃣\n{one}{two}{three}\n🟦⬛🟦\n\nSpinning...')
         await asyncio.sleep(0.5)
 
-
     payout = 0
 
     if len(set([one, two, three])) == 1: # jackpot x3 cheese x17

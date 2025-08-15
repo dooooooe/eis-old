@@ -152,7 +152,7 @@ async def run(ctx, client, userid, target):
     t_bal = t_data['money']
     t_name = ctx.guild.get_member(target).name
 
-    cooldown = 600
+    cooldown = 900
     remaining = round(cooldown - (time.time() - t_data['last_stolen']))
 
     if remaining > 0:
@@ -214,7 +214,7 @@ async def run(ctx, client, userid, target):
     async def game_loop():
         nonlocal success
         while True:
-            await game.edit(content=f'**{t_name}\'s vault**\n' + m.to_discord() + f'\nGet to the 💰 in {timeout} seconds!')
+            await game.edit(content=f'**{t_name}\'s vault**\n' + m.to_discord() + f'\nGet to the 💰 in {timeout + 1} seconds!')
 
             reaction = await wait_for_reactions(client, userid, game, options.keys(), timeout)
 

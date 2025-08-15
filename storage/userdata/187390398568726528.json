@@ -1,6 +1,6 @@
 {
     "userid": 187390398568726528,
-    "money": 191,
+    "money": 225,
     "ingame": false,
     "game_history": [
         "D",
@@ -28,7 +28,7 @@
         "L",
         "W"
     ],
-    "last_worked": 1738819426.6565123,
+    "last_worked": 1738892900.1996722,
     "last_stolen": 1738707222.9485831,
     "nickname": null,
     "name": "vacume",
@@ -36,7 +36,7 @@
     "inventory": {
         "items": {},
         "portfolio": {
-            "EIS": 2
+            "EIS": 1
         }
     }
 }
